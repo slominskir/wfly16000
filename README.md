@@ -18,7 +18,7 @@ docker compose up
 ```
 4. Navigate browser to app and login
 
-[localhost:8080/app](localhost:8080/app)
+[localhost:8080/app](http://localhost:8080/app)
 
  - **User**: `user`
  - **Pass**: `user`
