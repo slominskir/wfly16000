@@ -29,3 +29,7 @@ docker compose up
 docker exec -it wildfly cp /app.war /opt/jboss/wildfly/standalone/deployments
 ```
 
+## Notes
+
+ 1. The login (step 4) actually doesn't work, due to a `ERROR [org.wildfly.security.http.oidc] (default task-1) ELY23013: Failed verification of token: ELY23019: Invalid ID token`.  This likely is due to backend path to Keycloak (keycloak:8080) differing from front-end path (localhost:8081).  If you install and run Wildfly directly on the host machine and replace provider-url with "localhost:8081", the login does work.   I'm looking into this, but the test case does still show that redeploys break the Wildfly auth config. 
+ 1. A custom entrypoint is used to copy standalone.xml into place as opposed to bind mounting directly since Wildfly writes to standalone.xml at runtime.
