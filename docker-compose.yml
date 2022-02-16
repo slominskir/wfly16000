@@ -1,0 +1,33 @@
+---
+version: '3.9'
+
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:16.1.1
+    hostname: keycloak
+    container_name: keycloak
+    ports:
+      - "8081:8080"
+      - "9991:9990"
+    environment:
+      DB_VENDOR: h2
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_IMPORT: /realm.json
+      KEYCLOAK_FRONTEND_URL: 'http://localhost:8081/auth'
+    volumes:
+      - ./docker/realm.json:/realm.json
+
+  wildfly:
+    image: quay.io/wildfly/wildfly:26.0.1.Final
+    hostname: wildfly
+    container_name: wildfly
+    ports:
+      - "8443:8443"
+      - "8080:8080"
+      - "9990:9990"
+    entrypoint: /docker-entrypoint.sh
+    volumes:
+      - ./docker/docker-entrypoint.sh:/docker-entrypoint.sh
+      - ./docker/standalone.xml:/standalone.xml
+      - ./build/libs/app.war:/app.war

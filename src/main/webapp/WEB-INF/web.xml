@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="4.0" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+   http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+    <welcome-file-list>
+        <welcome-file>welcome</welcome-file>
+    </welcome-file-list>
+    <security-constraint>
+        <display-name>Enforce authentication</display-name>
+        <web-resource-collection>
+            <web-resource-name>Welcome</web-resource-name>
+            <url-pattern>/welcome</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>user</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-role>
+        <role-name>user</role-name>
+    </security-role>
+    <login-config>
+        <auth-method>OIDC</auth-method>
+    </login-config>
+</web-app>

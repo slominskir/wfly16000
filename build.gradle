@@ -1,0 +1,25 @@
+plugins {
+    id 'war'
+}
+
+description = 'Keycloak OIDC test app'
+
+project.sourceCompatibility = JavaVersion.VERSION_11
+project.targetCompatibility = JavaVersion.VERSION_11
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    providedCompile 'javax:javaee-api:8.0'
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs += ["-Xlint:deprecation", "-Xlint:unchecked"]
+}
+
+war {
+    archiveFileName = 'app.war'
+}
