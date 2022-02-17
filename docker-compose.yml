@@ -27,7 +27,8 @@ services:
       - "8080:8080"
       - "9990:9990"
     entrypoint: /docker-entrypoint.sh
+    environment:
+      USE_OLD_ADAPTER: "false"
     volumes:
       - ./docker/docker-entrypoint.sh:/docker-entrypoint.sh
-      - ./docker/standalone.xml:/standalone.xml
       - ./build/libs/app.war:/app.war
