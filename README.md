@@ -33,7 +33,7 @@ docker exec -it wildfly cp /app.war /opt/jboss/wildfly/standalone/deployments
 
 The login fails with `ERROR [org.wildfly.security.http.oidc] (default task-1) ELY23013: Failed verification of token: ELY23019: Invalid ID token`.  This appears to be a separate issue, and does not prevent observing the redploy issue.  See workaround below, which actually corrects both the redeploy issue and this Invalid ID token issue.
 
-The redeploy issue only occurs when using `provider-url`.   The `provider-url` configuration is best suited for when you have multiple apps sharing the same security provider.  The alternative is to define an `auth-server-url` directly in the secure-deployment config.  This `auth-server-url` configuration works - to see it working:
+The redeploy issue only occurs when using `provider-url` in a `provider` config element (with a separate `secure-deployment` element).   The `provider` configuration is best suited for when you have multiple apps sharing the same security provider.  The alternative is to define an `auth-server-url` directly in the secure-deployment config.  This `auth-server-url` configuration works - to see it working:
 
 1. Stop the compose environment and clean it up:
 ```
@@ -85,4 +85,9 @@ This `auth-server-url` does survive redeploy:
         </subsystem>
 ```
 
+## Things that don't work
+### Old adapter
 Worth pointing out that using the old adapter with latest Keycloak (26.0.1) doesn't appear to be an option - it doesn't seem to work.  Set environment variables STRATEGY_FILE=`adapter-deployment-with-auth-url.sh` and INSTALL_OLD_ADAPTER=`true` and see what I mean.   You'll proably want to edit the web.xml and replace `OIDC` with `KEYCLOAK`.  Still doesn't work though.  
+
+### provider-url inside secure-deployment element
+You can actually use the `provider-url` inside a `secure-deployment` element of standalone.xml (as opposed to inside a `provider` element).  This does sidestep the redeploy issue, but does NOT avoid the Invalid ID Token issue.
