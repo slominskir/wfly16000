@@ -28,6 +28,7 @@ services:
       - "9990:9990"
     entrypoint: /docker-entrypoint.sh
     environment:
+      USE_PROVIDER_URL: "true"
       USE_OLD_ADAPTER: "false"
     volumes:
       - ./docker/docker-entrypoint.sh:/docker-entrypoint.sh
