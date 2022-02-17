@@ -9,12 +9,13 @@ RESOURCE="app"
 
 if [[ "${USE_PROVIDER_URL}" == "true" ]]; then
 echo "Using Provider URL"
+PROVIDER_CONFIG=principal-attribute="preferred_username",ssl-required=EXTERNAL,provider-url="${PROVIDER_URL}"
 
-CONFIG=principal-attribute="preferred_username",resource="${RESOURCE}",provider-url="${PROVIDER_URL}",ssl-required=EXTERNAL
+DEPLOYMENT_CONFIG=provider="keycloak",resource="${RESOURCE}"
 else
 echo "Using auth-server-url"
 
-CONFIG=principal-attribute="preferred_username",resource="${RESOURCE}",realm="${REALM}",auth-server-url="${AUTH_SERVER}",ssl-required=EXTERNAL
+DEPLOYMENT_CONFIG=principal-attribute="preferred_username",ssl-required=EXTERNAL,resource="${RESOURCE}",realm="${REALM}",auth-server-url="${AUTH_SERVER}"
 fi
 
 /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0 &
@@ -30,9 +31,19 @@ wget https://github.com/keycloak/keycloak/releases/download/17.0.0/keycloak-oidc
 unzip keycloak-wildfly-adapter-dist-17.0.0.zip
 /opt/jboss/wildfly/bin/jboss-cli.sh --file=bin/adapter-elytron-install-offline.cli
 
+if [[ "${USE_PROVIDER_URL}" == "true" ]]; then
+
 /opt/jboss/wildfly/bin/jboss-cli.sh -c <<EOF
 batch
-/subsystem=keycloak/secure-deployment="${WAR}"/:add(${CONFIG})
+/subsystem=keycloak/provider="keycloak"/:add(${PROVIDER_CONFIG})
+run-batch
+EOF
+
+fi
+
+/opt/jboss/wildfly/bin/jboss-cli.sh -c <<EOF
+batch
+/subsystem=keycloak/secure-deployment="${WAR}"/:add(${DEPLOYMENT_CONFIG})
 /subsystem=keycloak/secure-deployment="${WAR}"/credential=secret:add(value="${SECRET}")
 run-batch
 EOF
@@ -41,9 +52,19 @@ else
 
 echo "Using New Build-in OIDC"
 
+if [[ "${USE_PROVIDER_URL}" == "true" ]]; then
+
 /opt/jboss/wildfly/bin/jboss-cli.sh -c <<EOF
 batch
-/subsystem=elytron-oidc-client/secure-deployment="${WAR}"/:add(${CONFIG})
+/subsystem=elytron-oidc-client/provider="keycloak"/:add(${PROVIDER_CONFIG})
+run-batch
+EOF
+
+fi
+
+/opt/jboss/wildfly/bin/jboss-cli.sh -c <<EOF
+batch
+/subsystem=elytron-oidc-client/secure-deployment="${WAR}"/:add(${DEPLOYMENT_CONFIG})
 /subsystem=elytron-oidc-client/secure-deployment="${WAR}"/credential=secret:add(secret="${SECRET}")
 run-batch
 EOF
