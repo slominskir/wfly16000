@@ -28,8 +28,9 @@ services:
       - "9990:9990"
     entrypoint: /docker-entrypoint.sh
     environment:
-      USE_PROVIDER_URL: "true"
-      USE_OLD_ADAPTER: "false"
+      INSTALL_OLD_ADAPTER: ${INSTALL_OLD_ADAPTER}
+      STRATEGY_FILE: ${STRATEGY_FILE}
     volumes:
       - ./docker/docker-entrypoint.sh:/docker-entrypoint.sh
+      - ./docker/strategies:/strategies
       - ./build/libs/app.war:/app.war

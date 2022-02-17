@@ -39,8 +39,16 @@ The redeploy issue only occurs when using `provider-url`.   The `provider-url` c
 ```
 docker compose down
 ```
-2. Modify `docker-compose.yml`:
-Replace the line that reads: `USE_PROVIDER_URL: "true"` with `USE_PROVIDER_URL: "false"`.
+2. Set environment variable STRATEGY_FILE=`oidc-deployment-with-auth-url.sh`:
+
+Windows CMD
+```
+set STRATEGY_FILE=oidc-deployment-with-auth-url.sh
+```
+Linux Bash
+```
+export STRATEGY_FILE=oidc-deployment-with-auth-url.sh
+```
 3. Run through the Usage steps above again, starting with step 3: `docker-compose up`
 
 
@@ -77,4 +85,4 @@ This `auth-server-url` does survive redeploy:
         </subsystem>
 ```
 
-Worth pointing out that using the old adapter with latest Keycloak (26.0.1) doesn't appear to be an option - it doesn't seem to work.  Update the `docker-compose.yml` and replace `USE_OLD_ADAPTER: "false"` with  `USE_OLD_ADAPTER: "true"` and see what I mean.   You'll proably want to edit the web.xml and replace `OIDC` with `KEYCLOAK`.  Still doesn't work though.  
+Worth pointing out that using the old adapter with latest Keycloak (26.0.1) doesn't appear to be an option - it doesn't seem to work.  Set environment variables STRATEGY_FILE=`adapter-deployment-with-auth-url.sh` and INSTALL_OLD_ADAPTER=`true` and see what I mean.   You'll proably want to edit the web.xml and replace `OIDC` with `KEYCLOAK`.  Still doesn't work though.  
