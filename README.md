@@ -77,3 +77,4 @@ This `auth-server-url` does survive redeploy:
         </subsystem>
 ```
 
+Worth pointing out that using the old adapter with latest Keycloak (26.0.1) doesn't appear to be an option - it doesn't seem to work.  Update the `docker-compose.yml` and replace `USE_OLD_ADAPTER: "false"` with  `USE_OLD_ADAPTER: "true"` and see what I mean.   You'll proably want to edit the web.xml and replace `OIDC` with `KEYCLOAK`.  Still doesn't work though.  
