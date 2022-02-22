@@ -10,7 +10,7 @@ cd wfly16000
 ```
 2. Build test app.war
 ```
-gradlw build
+gradlew build
 ```
 3. Launch Docker Compose test environment
 ```
