@@ -31,7 +31,7 @@ docker exec -it wildfly cp /app.war /opt/jboss/wildfly/standalone/deployments
 
 ## Notes
 
-The login fails with `ERROR [org.wildfly.security.http.oidc] (default task-1) ELY23013: Failed verification of token: ELY23019: Invalid ID token`.  This appears to be a separate issue, and does not prevent observing the redploy issue.  See workaround below, which actually corrects both the redeploy issue and this Invalid ID token issue.
+The login fails with `ERROR [org.wildfly.security.http.oidc] (default task-1) ELY23013: Failed verification of token: ELY23019: Invalid ID token`.  This appears to be a separate issue (See [WFLY-16059](https://issues.redhat.com/browse/WFLY-16059)), and does not prevent observing the redploy issue.  See workaround below, which actually corrects both the redeploy issue and this Invalid ID token issue.
 
 The redeploy issue only occurs when using `provider-url` in a `provider` config element (with a separate `secure-deployment` element).   The `provider` configuration is best suited for when you have multiple apps sharing the same security provider.  The alternative is to define an `auth-server-url` directly in the secure-deployment config.  This `auth-server-url` configuration works - to see it working:
 
